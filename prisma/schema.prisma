@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//são as tabelas
+//criar uma migration comando: yarn prisma migration dev
+//nome desta migration create-table-users
+
+model User{
+  id String @id @default(uuid())
+  name String 
+  email String
+  password String
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("users")
+} 
+
+///uuid é responsável pelo auto incremente
+model Category{
+  id String @id @default(uuid())
+  name String
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("categories")
+  //Fazer um relacionamento com outra tabela
+  products Product[] //uma categoria pode ter varios produtos
+}
+
+model Product{
+  id String @id @default(uuid())
+  name String
+  price String 
+  description String
+  banner String
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  //referenciar a categoria 
+  category Category @relation(fields: [category_id], references:[id])
+
+
+  @@map("products")
+  category_id String
+  itens Item[]
+}
+
+model Order{
+  id String @id @default(uuid())
+  table Int
+  status Boolean @default(false)
+//O STATUS SEMPRE COMEÇA COMO FALSO
+  draft Boolean @default(true)//o pedido sempre começa com o status de rascunho
+  name String?
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+  @@map("orders")
+  itens Item[]
+}
+
+model Item{
+  id String @id @default(uuid())
+  amout Int //quantidade
+
+  order Order @relation(fields: [order_id],references: [id])
+  product Product @relation(fields: [product_id] ,references: [id])
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+  @@map("itens")
+  order_id String
+  product_id String
+}
