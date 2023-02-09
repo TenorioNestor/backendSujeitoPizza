@@ -17,7 +17,7 @@ app.use(router);
 //acessar a pasta tmp
 app.use(
     '/files',
-    express.static(path.resolve(__dirname,'..', 'tmp'))
+    express.static(path.resolve(__dirname,'..', 'tmpDele'))
 )
 
 //criar uma barreira um middleware 
