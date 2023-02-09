@@ -10,5 +10,5 @@ class ListOrderController{
         return res.json(order)
     }
 }
-
+ 
 export {ListOrderController}
